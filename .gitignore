@@ -1,7 +1,30 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ============================================================
+# .gitignore — The Serverless Odyssey
+# DevSecOps Standard: Next.js 16 + Supabase + Cloudinary + Vercel
+# ============================================================
 
-# dependencies
-/node_modules
+# ─── SECRETS & CREDENTIALS (WAJIB — JANGAN HAPUS) ───────────
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+service-account*.json
+
+# ─── NEXT.JS BUILD ARTIFACTS ─────────────────────────────────
+/.next/
+/out/
+/build/
+next-env.d.ts
+*.tsbuildinfo
+
+# ─── DEPENDENCIES ────────────────────────────────────────────
+/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -10,32 +33,55 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
+# ─── TESTING & COVERAGE ──────────────────────────────────────
+/coverage/
+/.nyc_output/
+/test-results/
+/playwright-report/
+/playwright/.cache/
 
-# next.js
-/.next/
-/out/
+# ─── VERCEL ──────────────────────────────────────────────────
+.vercel
+.vercel-cache/
 
-# production
-/build
+# ─── SUPABASE LOCAL ──────────────────────────────────────────
+supabase/.branches/
+supabase/.temp/
 
-# misc
-.DS_Store
-*.pem
+# ─── CLOUDINARY ──────────────────────────────────────────────
+.cloudinary/
+cloudinary_config.json
 
-# debug
+# ─── DEBUG & LOGS ────────────────────────────────────────────
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+lerna-debug.log*
+*.log
 
-# env files (can opt-in for committing if needed)
-.env*
+# ─── OS TEMPORARY FILES ──────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
 
-# vercel
-.vercel
+# ─── EDITOR & IDE ────────────────────────────────────────────
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# ─── TURBOPACK CACHE ─────────────────────────────────────────
+.turbo/
+
+# ─── MISC ────────────────────────────────────────────────────
+*.tgz
+*.zip
+/dist/
