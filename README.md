@@ -1,206 +1,65 @@
-<div align="center">
+# Katalog UMKM
 
-# 🚀 The Serverless Odyssey
+Web profil dan katalog produk untuk usaha kecil. Pengunjung dapat melihat produk, mencari dan memfilter katalog, lalu menghubungi pemilik melalui WhatsApp. Pemilik mengelola produk dan informasi toko dari dashboard.
 
-### Full-Stack Serverless Application — Proyek Perkuliahan
+## Teknologi
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.4-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Supabase](https://img.shields.io/badge/Supabase-Cloud_PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Cloudinary](https://img.shields.io/badge/Cloudinary-CDN-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)](https://cloudinary.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-Edge_Deploy-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-4.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
+- Next.js App Router, React, dan TypeScript
+- Tailwind CSS, komponen UI, dan Lucide
+- Supabase PostgreSQL, Auth, dan Row Level Security
+- Cloudinary untuk upload gambar dari server
+- Siap dikonfigurasi untuk deployment di Vercel
 
-**Menjelajahi era baru pengembangan web tanpa server — scalable, aman, dan efisien.**
+## Menjalankan secara lokal
 
-[Demo Live](https://your-app.vercel.app) · [Laporan Bug](https://github.com/byutrials-prog/my-serverless-app/issues) · [Request Fitur](https://github.com/byutrials-prog/my-serverless-app/issues)
+1. Gunakan Node.js 20 atau lebih baru, lalu jalankan `npm install`.
+2. Salin `.env.example` menjadi `.env.local` dan isi URL/key Supabase serta kredensial Cloudinary.
+3. Jalankan isi `schema.sql` melalui Supabase SQL Editor.
+4. Buat akun pemilik di Supabase Auth → Users menggunakan email/password.
+5. Setelah akun dibuat, jadikan hanya akun pemilik tersebut sebagai admin melalui SQL Editor:
 
-</div>
+   ```sql
+   update public.profiles
+   set role = 'user'
+   where role = 'admin';
 
----
+   update public.profiles
+   set role = 'admin'
+   where email = 'email-pemilik@example.com';
+   ```
 
-## 📖 Deskripsi Proyek
+   Langkah pertama diperlukan jika project sebelumnya memakai skema yang otomatis memberi role admin kepada setiap pendaftar.
+6. Jalankan `npm run dev`, kemudian buka `http://localhost:3000`.
 
-**The Serverless Odyssey** adalah aplikasi web full-stack modern yang dibangun di atas ekosistem serverless cloud. Proyek ini dirancang sebagai eksplorasi mendalam terhadap arsitektur tanpa server (_serverless_) menggunakan teknologi edge-first, database cloud terkelola, dan CDN media pintar.
+Akun baru diberi role `user`. Jangan pernah memasukkan Supabase service-role key atau Cloudinary API secret ke variabel `NEXT_PUBLIC_*`.
 
-Proyek ini membuktikan bahwa aplikasi produksi-siap dapat dibangun **tanpa mengelola server fisik sama sekali**.
+## Konfigurasi
 
----
+| Variabel | Kegunaan |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | URL project Supabase |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Publishable key Supabase (`NEXT_PUBLIC_SUPABASE_ANON_KEY` lama juga didukung) |
+| `CLOUDINARY_URL` | URL kredensial dari Cloudinary API Keys (alternatif) |
+| `CLOUDINARY_CLOUD_NAME` | Nama cloud Cloudinary (gunakan bersama dua variabel di bawah jika tanpa `CLOUDINARY_URL`) |
+| `CLOUDINARY_API_KEY` | API key Cloudinary |
+| `CLOUDINARY_API_SECRET` | Secret server-side untuk upload Cloudinary |
+| `NEXT_PUBLIC_SITE_URL` | URL publik aplikasi |
 
-## 🏛️ Arsitektur 4 Pilar
+Upload gambar dilakukan dari server dengan kredensial Cloudinary; secret tidak dikirim ke browser. Gambar dibatasi maksimal 5 MB.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    THE SERVERLESS ODYSSEY                    │
-│                    Arsitektur 4 Pilar                        │
-└─────────────────────────────────────────────────────────────┘
-         │                │               │              │
-    ┌────▼────┐      ┌────▼────┐    ┌────▼────┐   ┌────▼────┐
-    │  Next.js │      │Supabase │    │Cloudinar│   │  Vercel  │
-    │    16    │      │  Cloud  │    │   CDN   │   │  Edge    │
-    │ App Rtr  │      │Postgres │    │  Media  │   │ Runtime  │
-    └─────────┘      └─────────┘    └─────────┘   └─────────┘
-    Frontend +        Database +     Asset +        Hosting +
-    API Routes        Auth +         Image Optim.   CI/CD +
-    (TypeScript)      RLS Policy     Upload          CDN Global
-```
+## Fitur
 
-| Pilar | Teknologi | Peran |
-|-------|-----------|-------|
-| 🎨 **Frontend + API** | Next.js 16 App Router | Server Components, API Routes, Edge Middleware |
-| 🗄️ **Database + Auth** | Supabase Cloud PostgreSQL | RLS, Realtime, Auth, Row-Level Security |
-| 🖼️ **Media CDN** | Cloudinary | Upload, Transformasi Gambar, Optimasi Otomatis |
-| ⚡ **Edge Deployment** | Vercel Edge Runtime | CI/CD Otomatis, Preview Deployments, Global CDN |
+- Katalog publik dengan pencarian, filter kategori, urutan harga, dan status stok
+- Halaman detail produk dengan tautan pemesanan WhatsApp terisi otomatis
+- Profil toko: pesan banner promosi, cerita, keunggulan, alamat, jam buka, Instagram, dan tautan peta
+- Dashboard admin: autentikasi email/password, tambah/edit/hapus produk, pratinjau gambar, dan pengaturan profil
+- Kebijakan RLS membatasi perubahan data ke profil ber-role `admin`
 
----
-
-## 🗂️ Struktur Direktori
-
-```
-my-serverless-app/
-├── src/
-│   ├── app/                  # Next.js 16 App Router
-│   │   ├── layout.tsx        # Root Layout
-│   │   ├── page.tsx          # Home Page
-│   │   └── api/              # API Route Handlers
-│   ├── components/           # Reusable UI Components
-│   ├── lib/                  # Utility & Client Config
-│   │   ├── supabase.ts       # Supabase Client
-│   │   └── cloudinary.ts     # Cloudinary Config
-│   └── types/                # TypeScript Type Definitions
-├── public/                   # Static Assets
-├── .env.example              # ✅ Template variabel lingkungan (aman di-commit)
-├── .env.local                # 🔒 Secrets lokal (TIDAK di-commit)
-├── .gitignore                # Konfigurasi pengabaian Git
-├── next.config.ts            # Konfigurasi Next.js
-├── tailwind.config.ts        # Konfigurasi Tailwind CSS
-├── tsconfig.json             # Konfigurasi TypeScript
-└── package.json              # Dependensi Proyek
-```
-
----
-
-## ⚙️ Setup Lokal
-
-### Prasyarat
-
-Pastikan kamu sudah menginstall:
-- [Node.js](https://nodejs.org/) `>= 20.x`
-- [npm](https://npmjs.com/) `>= 10.x`
-- Akun [Supabase](https://supabase.com/) (gratis)
-- Akun [Cloudinary](https://cloudinary.com/) (gratis)
-
-### Langkah Instalasi
-
-**1. Clone repositori**
-```bash
-git clone https://github.com/byutrials-prog/my-serverless-app.git
-cd my-serverless-app
-```
-
-**2. Install dependensi**
-```bash
-npm install
-```
-
-**3. Konfigurasi variabel lingkungan**
-```bash
-# Salin template ke file lokal
-cp .env.example .env.local
-```
-
-Buka `.env.local` dan isi nilai nyata untuk setiap variabel:
-
-| Variabel | Sumber |
-|----------|--------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase Dashboard → Project Settings → API |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Dashboard → Project Settings → API |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase Dashboard → Project Settings → API |
-| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Cloudinary Console → Dashboard |
-| `CLOUDINARY_API_KEY` | Cloudinary Console → Dashboard |
-| `CLOUDINARY_API_SECRET` | Cloudinary Console → Dashboard |
-
-**4. Jalankan server development**
-```bash
-npm run dev
-```
-
-Buka [http://localhost:3000](http://localhost:3000) di browser kamu.
-
----
-
-## 🌿 Aturan Git Branch
-
-Proyek ini mengikuti **Git Flow** yang disederhanakan:
-
-```
-main ─────────────────────────────────────────────► Production
-  └── develop ──────────────────────────────────── Integration
-        ├── feature/nama-fitur ────────────────── Fitur Baru
-        └── fix/nama-bug ──────────────────────── Bug Fix
-```
-
-| Langkah | Perintah | Keterangan |
-|---------|----------|------------|
-| **1. Buat branch baru** | `git checkout -b feature/nama-fitur develop` | Selalu dari `develop`, bukan `main` |
-| **2. Commit perubahan** | `git commit -m "feat: deskripsi singkat"` | Gunakan [Conventional Commits](https://www.conventionalcommits.org/) |
-| **3. Push ke remote** | `git push origin feature/nama-fitur` | Push branch fitur ke GitHub |
-| **4. Buat Pull Request** | Via GitHub UI | PR dari `feature/` → `develop` → `main` |
-
-### Format Pesan Commit
-
-```
-feat:     ✨ Fitur baru
-fix:      🐛 Perbaikan bug
-docs:     📝 Perubahan dokumentasi
-style:    💄 Formatting, tanpa perubahan logika
-refactor: ♻️  Refactor kode
-test:     ✅ Menambah atau memperbaiki test
-chore:    🔧 Update dependencies, konfigurasi
-```
-
----
-
-## 🚀 Deployment ke Vercel
+## Pemeriksaan dan deployment
 
 ```bash
-# Install Vercel CLI (jika belum)
-npm i -g vercel
-
-# Deploy ke production
-vercel --prod
+npm run lint
+npm run build
 ```
 
-Atau hubungkan repositori GitHub ke [Vercel Dashboard](https://vercel.com/dashboard) untuk **auto-deploy** setiap push ke `main`.
-
-> ⚠️ **Penting:** Tambahkan semua variabel dari `.env.local` ke Vercel Dashboard → Project → Settings → Environment Variables.
-
----
-
-## 🔒 Keamanan & DevSecOps
-
-- ✅ Semua secrets dikelola via Environment Variables
-- ✅ `.env*.local` tidak pernah di-commit (dilindungi `.gitignore`)
-- ✅ Supabase Row Level Security (RLS) aktif di semua tabel
-- ✅ API Routes dilindungi dengan validasi server-side
-- ✅ `.env.example` publik hanya berisi placeholder
-
----
-
-## 👤 Author
-
-**byutrials-prog**
-- GitHub: [@byutrials-prog](https://github.com/byutrials-prog)
-
----
-
-## 📄 Lisensi
-
-Proyek ini dilisensikan di bawah **MIT License**.
-
----
-
-<div align="center">
-  <sub>Built with ❤️ as part of <strong>The Serverless Odyssey</strong> — Proyek Perkuliahan</sub>
-</div>
+Untuk Vercel, impor project lalu tambahkan variabel lingkungan yang sama melalui **Project Settings → Environment Variables**. Terapkan `schema.sql` pada project Supabase production dan promosikan akun pemilik secara manual seperti langkah di atas.

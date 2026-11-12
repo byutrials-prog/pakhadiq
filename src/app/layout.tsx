@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "The Serverless Odyssey",
-  description:
-    "Aplikasi manajemen tugas serverless modern berbasis Next.js 16 App Router, Tailwind CSS, dan Shadcn UI.",
+  title: "Katalog UMKM",
+  description: "Jelajahi produk pilihan dari usaha lokal dan hubungi pemiliknya secara langsung.",
 };
 
 export default function RootLayout({
